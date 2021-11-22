@@ -1,30 +1,58 @@
-let inputDOM = document.querySelector("#task");
+let input = document.querySelector("#task");
 
-let todolistDOM = document.querySelector("#list");
+let ul = document.querySelector("ul");
 
-function isEmpty(event) {
+let todoList =
+  localStorage.getItem("task") != null
+    ? JSON.parse(localStorage.getItem("task"))
+    : [];
+
+const button = document.querySelector("#liveToastBtn");
+
+button.addEventListener("click", inputHandler);
+
+const alertEmpty = document.querySelector("#alertEmpty");
+
+// li elemeti oluşturma
+const liMarker = (text) => {
+  const li = document.createElement("li");
+  li.textContent = text;
+  ul.appendChild(li);
+};
+
+function inputHandler(event) {
   event.preventDefault();
-  if (inputDOM.value && inputDOM.value != KeyboardEvent.DOM_KEY_LOCATION_STANDARD) {
+  if (input.value != null && input.value != KeyboardEvent.DOM_KEY_LOCATION_STANDARD) {
     newElement();
-    inputDOM.value = "";
+    input.value = ""
+  } else {
+    $('.error').toast('show')
   }
-  else{
-      //toast
-  }
-  inputDOM.value = ""
-}
-// yeni eleman ekleme
-function newElement(event) {
-  let liDOM = document.createElement("li");
-  liDOM.innerHTML = inputDOM.value;
-  todolistDOM.append(liDOM);
-  localStorage.setItem(`${inputDOM.value}`, inputDOM.value);
+  input.value = "";
 }
 
-// eleman silme
+// yeni task ekleme
+function newElement() {
+  todoList.push(input.value);
+  $('.success').toast('show')
+  localStorage.setItem("task", JSON.stringify(todoList));
+  liMarker(input.value);
+}
 
-// yapıldı function
-function taskCheck(li) {
-    console.log("girdi")
-    li.style.color = "blue"
+// listeleme
+todoList == null ? todoList : todoList.forEach((element) => {
+  liMarker(element);
+});
+
+// yapıldı fonksiyonu
+ul.addEventListener("click", checkList)
+function checkList() {
+  ul.style.textDecoration = "line-through" 
+  let removeButton = document.createElement("button")
+  removeButton.innerHTML = "x"
+}
+
+// delete fonksiyonu
+function removeTask() {
+  localStorage.removeItem("task",todoList)
 }
