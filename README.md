@@ -1,2 +1,3 @@
-### javascript-todo-list
-[![Alternate Text]]({js-todo-list.gif} "Link Title")
+### Javascript Todo List
+![](js-todo-list.gif)
+
